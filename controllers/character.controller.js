@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const characters = require('../models/characters');
 const shows = require('../models/shows');
 const jwt = require('jsonwebtoken');
@@ -7,9 +8,41 @@ async function charList(req, res) {
     if (err) {
       res.sendStatus(403);
     } else {
-      const result = await characters.findAll();
-      const characterList = result.map(({ name, image }) => ({ name, image }));
-      res.status(200).json(characterList);
+      const query = await req.query;
+      if (query.age || query.weight || query.shows) {
+        let chars;
+        if (query.age !== undefined) {
+          chars = await characters.findAll({
+            where: { age: query.age },
+          });
+        } else if (query.weight !== undefined) {
+          chars = await characters.findAll({
+            where: {
+              weight: query.weight,
+            },
+          });
+        } else if (query.shows !== undefined) {
+          const showList = query.shows.map((s) => parseInt(s));
+          chars = await characters.findAll({
+            where: { name: data.name, shows: { [Op.contains]: showList } },
+          });
+        }
+        if (chars === null) {
+          res
+            .status(404)
+            .json({ message: 'No Character found with that filter' });
+          return;
+        } else if (chars !== null) {
+          res.status(200).json(chars);
+        }
+      } else {
+        const result = await characters.findAll();
+        const characterList = result.map(({ name, image }) => ({
+          name,
+          image,
+        }));
+        res.status(200).json(characterList);
+      }
     }
   });
 }
@@ -29,7 +62,7 @@ async function getOneChar(req, res) {
           res.status(200).json(char);
         }
       } catch (error) {
-        console.error(error);
+        throw new Error(err);
       }
     }
   });
@@ -76,7 +109,7 @@ async function createChar(req, res) {
             .json({ message: 'Character created successfully', data: newChar });
         }
       } catch (error) {
-        console.error(error);
+        throw new Error(err);
       }
     }
   });
@@ -97,7 +130,7 @@ async function editChar(req, res) {
             .status(404)
             .json({ message: `Character ${data.name} does not found` });
         } else {
-          const check = validateShows(data.shows);
+          const check = await validateShows(data.shows);
           if (check) {
             res
               .status(404)
@@ -121,7 +154,7 @@ async function editChar(req, res) {
           });
         }
       } catch (error) {
-        console.error(error);
+        throw new Error(err);
       }
     }
   });
@@ -149,7 +182,7 @@ async function deleteChar(req, res) {
             .json({ message: `Character ${data.name} was deleted` });
         }
       } catch (error) {
-        console.error(error);
+        throw new Error(err);
       }
     }
   });
