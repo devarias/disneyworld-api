@@ -118,39 +118,35 @@ async function editChar(req, res) {
     if (err) {
       res.sendStatus(403);
     } else {
-      try {
-        const name = await req.params.name;
-        const data = await req.body;
-        if ((await findChar(data.name)) === null) {
+      const name = await req.params.name;
+      const data = await req.body;
+      if ((await findChar(data.name)) === null) {
+        res
+          .status(404)
+          .json({ message: `Character ${data.name} does not found` });
+      } else {
+        const check = await validateShows(data.shows);
+        if (check) {
           res
             .status(404)
-            .json({ message: `Character ${data.name} does not found` });
-        } else {
-          const check = await validateShows(data.shows);
-          if (check) {
-            res
-              .status(404)
-              .json({ message: `The show #${check} does not exist` });
-            return;
-          }
-          const charUpdated = await characters.update(
-            {
-              name: data.name ? data.name : null,
-              image: data.image ? data.image : null,
-              age: data.age ? data.age : null,
-              weight: data.weight ? data.weight : null,
-              history: data.history ? data.history : null,
-              shows: data.shows ? data.shows : null,
-            },
-            { where: { name: name } }
-          );
-          res.status(200).json({
-            message: `Character ${data.name} was updated`,
-            data: charUpdated,
-          });
+            .json({ message: `The show #${check} does not exist` });
+          return;
         }
-      } catch (error) {
-        throw new Error(err);
+        const charUpdated = await characters.update(
+          {
+            name: data.name ? data.name : null,
+            image: data.image ? data.image : null,
+            age: data.age ? data.age : null,
+            weight: data.weight ? data.weight : null,
+            history: data.history ? data.history : null,
+            shows: data.shows ? data.shows : null,
+          },
+          { where: { name: name } }
+        );
+        res.status(200).json({
+          message: `Character ${data.name} was updated`,
+          data: charUpdated,
+        });
       }
     }
   });
