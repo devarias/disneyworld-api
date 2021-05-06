@@ -53,10 +53,7 @@ async function getOneChar(req, res) {
     } else {
       try {
         const data = await req.params;
-        const char = await characters.findOne({
-          where: { name: data.name },
-        });
-        if (char === null) {
+        if ((await findChar(data.name)) === null) {
           res.status(404).json({ message: 'Character does not found' });
         } else {
           res.status(200).json(char);
@@ -81,38 +78,40 @@ async function createChar(req, res) {
     if (err) {
       res.sendStatus(403);
     } else {
-      try {
-        const data = await req.body;
-        const char = await characters.findOne({
-          where: { name: data.name },
-        });
-        if (char !== null) {
-          res.status(409).json({ message: 'Character already exists' });
-        } else {
-          const check = await validateShows(data.shows);
-          if (check) {
-            res
-              .status(404)
-              .json({ message: `The show #${check} does not exist` });
-            return;
-          }
-          const newChar = await characters.create({
-            name: data.name,
-            image: data.image,
-            age: data.age,
-            weight: data.weight,
-            history: data.history,
-            shows: data.shows,
-          });
+      const data = await req.body;
+      const char = await characters.findOne({
+        where: { name: data.name },
+      });
+      if (char !== null) {
+        res.status(409).json({ message: 'Character already exists' });
+      } else {
+        const check = await validateShows(data.shows);
+        if (check) {
           res
-            .status(201)
-            .json({ message: 'Character created successfully', data: newChar });
+            .status(404)
+            .json({ message: `The show #${check} does not exist` });
+          return;
         }
-      } catch (error) {
-        throw new Error(err);
+        const newChar = await characters.create({
+          name: data.name,
+          image: data.image,
+          age: data.age,
+          weight: data.weight,
+          history: data.history,
+          shows: data.shows,
+        });
+        res
+          .status(201)
+          .json({ message: 'Character created successfully', data: newChar });
       }
     }
   });
+}
+async function findChar(name) {
+  const char = await characters.findOne({
+    where: { name: name },
+  });
+  return char;
 }
 async function editChar(req, res) {
   jwt.verify(req.token, 'secretToken', async (err) => {
@@ -122,10 +121,7 @@ async function editChar(req, res) {
       try {
         const name = await req.params.name;
         const data = await req.body;
-        const char = await characters.findOne({
-          where: { name: data.name },
-        });
-        if (char === null) {
+        if ((await findChar(data.name)) === null) {
           res
             .status(404)
             .json({ message: `Character ${data.name} does not found` });
