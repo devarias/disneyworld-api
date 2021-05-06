@@ -4,7 +4,8 @@ const cors = require('cors');
 
 /** Import the routes */
 const loginRoutes = require('../routes/login');
-const charListRoute = require('../routes/characters');
+const charactersRoutes = require('../routes/characters');
+const showRoutes = require('../routes/shows');
 
 /** Initialize the server */
 const app = express();
@@ -15,6 +16,7 @@ app.use(json());
 
 /** Routes */
 app.use('/api/login', loginRoutes);
-app.use('/api/characters', charListRoute);
+app.use('/api/characters', charactersRoutes);
+app.use('/api/shows', showRoutes);
 
 module.exports = app;
