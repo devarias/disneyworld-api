@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS characters (
     shows INTEGER[]
 )
 CREATE TABLE IF NOT EXISTS shows (
-    id INTEGER NOT NULL PRIMARY KEY,
+    id SMALLSERIAL PRIMARY KEY,
     title VARCHAR NOT NULL,
     characters VARCHAR[],
     image VARCHAR NOT NULL,
