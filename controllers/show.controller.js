@@ -1,8 +1,9 @@
 const shows = require('../models/shows');
 const jwt = require('jsonwebtoken');
+const TOKEN = process.env.TOKEN;
 
 async function showList(req, res) {
-  jwt.verify(req.token, 'secretToken', async (err) => {
+  jwt.verify(req.token, TOKEN, async (err) => {
     if (err) {
       res.sendStatus(403);
     } else {
@@ -43,7 +44,7 @@ async function showList(req, res) {
   });
 }
 async function getOneShow(req, res) {
-  jwt.verify(req.token, 'secretToken', async (err) => {
+  jwt.verify(req.token, TOKEN, async (err) => {
     if (err) {
       res.sendStatus(403);
     } else {
@@ -64,7 +65,7 @@ async function getOneShow(req, res) {
   });
 }
 async function createShow(req, res) {
-  jwt.verify(req.token, 'secretToken', async (err) => {
+  jwt.verify(req.token, TOKEN, async (err) => {
     if (err) {
       res.sendStatus(403);
     } else {
@@ -95,7 +96,7 @@ async function createShow(req, res) {
   });
 }
 async function editShow(req, res) {
-  jwt.verify(req.token, 'secretToken', async (err) => {
+  jwt.verify(req.token, TOKEN, async (err) => {
     if (err) {
       res.sendStatus(403);
     } else {
@@ -131,7 +132,7 @@ async function editShow(req, res) {
   });
 }
 async function deleteShow(req, res) {
-  jwt.verify(req.token, 'secretToken', async (err) => {
+  jwt.verify(req.token, TOKEN, async (err) => {
     if (err) {
       res.sendStatus(403);
     } else {

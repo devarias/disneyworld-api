@@ -1,5 +1,6 @@
 const users = require('../models/user');
 const jwt = require('jsonwebtoken');
+const TOKEN = process.env.TOKEN;
 
 async function login(req, res) {
   const user = await req.body;
@@ -9,7 +10,7 @@ async function login(req, res) {
   if (check === null) {
     res.status(404).json({ message: 'Email not registered' });
   } else {
-    jwt.sign({ user }, 'secretToken', (err, token) => {
+    jwt.sign({ user }, TOKEN, (err, token) => {
       res.json({ token });
     });
   }

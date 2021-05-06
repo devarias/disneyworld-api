@@ -2,9 +2,10 @@ const { Op } = require('sequelize');
 const characters = require('../models/characters');
 const shows = require('../models/shows');
 const jwt = require('jsonwebtoken');
+const TOKEN = process.env.TOKEN;
 
 async function charList(req, res) {
-  jwt.verify(req.token, 'secretToken', async (err) => {
+  jwt.verify(req.token, TOKEN, async (err) => {
     if (err) {
       res.sendStatus(403);
     } else {
@@ -47,7 +48,7 @@ async function charList(req, res) {
   });
 }
 async function getOneChar(req, res) {
-  jwt.verify(req.token, 'secretToken', async (err) => {
+  jwt.verify(req.token, TOKEN, async (err) => {
     if (err) {
       res.sendStatus(403);
     } else {
@@ -74,7 +75,7 @@ async function validateShows(showList) {
   return false;
 }
 async function createChar(req, res) {
-  jwt.verify(req.token, 'secretToken', async (err) => {
+  jwt.verify(req.token, TOKEN, async (err) => {
     if (err) {
       res.sendStatus(403);
     } else {
@@ -114,7 +115,7 @@ async function findChar(name) {
   return char;
 }
 async function editChar(req, res) {
-  jwt.verify(req.token, 'secretToken', async (err) => {
+  jwt.verify(req.token, TOKEN, async (err) => {
     if (err) {
       res.sendStatus(403);
     } else {
@@ -152,7 +153,7 @@ async function editChar(req, res) {
   });
 }
 async function deleteChar(req, res) {
-  jwt.verify(req.token, 'secretToken', async (err) => {
+  jwt.verify(req.token, TOKEN, async (err) => {
     if (err) {
       res.sendStatus(403);
     } else {
