@@ -13,7 +13,6 @@ const shows = sequelize.define(
     },
     title: {
       type: Sequelize.STRING,
-      primaryKey: true,
       allowNull: false,
     },
     release: {
