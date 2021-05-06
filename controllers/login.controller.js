@@ -33,14 +33,14 @@ async function register(req, res) {
       res.status(409).json({ message: 'Email already registered' });
     }
   } catch (err) {
-    console.log(err);
+    throw new Error(err);
   }
 }
 
 /** Authorization: Bearer <token> */
 function verifyToken(req, res, next) {
   const bearerHeader = req.headers['authorization'];
-  if (typeof bearerHeader !== undefined) {
+  if (bearerHeader !== undefined) {
     const bearerToken = bearerHeader.split(' ')[1];
     req.token = bearerToken;
     next();
