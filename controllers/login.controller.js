@@ -4,6 +4,11 @@ const TOKEN = process.env.TOKEN;
 
 async function login(req, res) {
   const user = await req.body;
+  const validation = validate(user.email, user.password);
+  if (validation.bad === true) {
+    res.status(400).json({ message: validation.message });
+    return;
+  }
   const check = await users.findOne({
     where: { email: user.email },
   });
