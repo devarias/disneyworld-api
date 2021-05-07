@@ -15,7 +15,20 @@ async function login(req, res) {
     });
   }
 }
-
+function validate(email, password) {
+  if (email.length === 0) {
+    return { message: 'Email cannot be empty', bad: true };
+  }
+  const atPos = email.indexOf('@');
+  var dotPos = email.lastIndexOf('.');
+  if (atPos < 1 || dotPos < atPos + 2 || dotPos + 2 >= email.length) {
+    return { message: 'Please enter a valid e-mail address', bad: true };
+  }
+  if (password.length < 6) {
+    return { message: 'Password must be at least 6 characters', bad: true };
+  }
+  return { bad: false };
+}
 async function register(req, res) {
   try {
     const data = await req.body;
@@ -23,6 +36,11 @@ async function register(req, res) {
       where: { email: data.email },
     });
     if (check === null) {
+      const validation = validate(data.email, data.password);
+      if (validation.bad === true) {
+        res.status(400).json({ message: validation.message });
+        return;
+      }
       const newUser = await users.create({
         email: data.email,
         password: data.password,
