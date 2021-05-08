@@ -19,7 +19,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: 'https://disneyworld-api.herokuapp.com/api',
+        url: 'https://disneyworld-api.herokuapp.com',
       },
     ],
   },
@@ -42,8 +42,8 @@ app.use(json());
 
 /** Routes */
 app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-app.use('/api/login', loginRoutes);
-app.use('/api/characters', charactersRoutes);
-app.use('/api/shows', showRoutes);
+app.use('/login', loginRoutes);
+app.use('/characters', charactersRoutes);
+app.use('/shows', showRoutes);
 
 module.exports = app;

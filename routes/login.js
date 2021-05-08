@@ -46,12 +46,15 @@ const router = Router();
  *          $ref: '#/components/schemas/User'
  *    tags: [1. Login and Register]
  *    responses:
- *      "201":
- *        description: Successful register
- *      "400":
- *        description: Invalid email or password
- *      "409":
- *        description: Email already registered
+ *      201:
+ *        description: successful register
+ *        schema:
+ *          type: object
+ *          properties:
+ *            message:
+ *              type: string
+ *              description: successful message
+ *            $href: '#/components/schemas/User'
  */
 /**
  * @swagger
