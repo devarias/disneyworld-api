@@ -43,7 +43,7 @@ async function showList(req, res) {
     }
   });
 }
-async function getOneShow(req, res) {
+async function getOneShow(req, res, next) {
   jwt.verify(req.token, TOKEN, async (err) => {
     if (err) {
       res.sendStatus(403);
@@ -59,12 +59,12 @@ async function getOneShow(req, res) {
           res.status(200).json(show);
         }
       } catch (error) {
-        throw new Error(err);
+        next(err);
       }
     }
   });
 }
-async function createShow(req, res) {
+async function createShow(req, res, next) {
   jwt.verify(req.token, TOKEN, async (err) => {
     if (err) {
       res.sendStatus(403);
@@ -90,12 +90,12 @@ async function createShow(req, res) {
             .json({ message: 'Show created successfully', data: newShow });
         }
       } catch (error) {
-        throw new Error(err);
+        next(err);
       }
     }
   });
 }
-async function editShow(req, res) {
+async function editShow(req, res, next) {
   jwt.verify(req.token, TOKEN, async (err) => {
     if (err) {
       res.sendStatus(403);
@@ -126,12 +126,12 @@ async function editShow(req, res) {
           data: showUpdated,
         });
       } catch (error) {
-        throw new Error(err);
+        next(err);
       }
     }
   });
 }
-async function deleteShow(req, res) {
+async function deleteShow(req, res, next) {
   jwt.verify(req.token, TOKEN, async (err) => {
     if (err) {
       res.sendStatus(403);
@@ -150,7 +150,7 @@ async function deleteShow(req, res) {
           res.status(200).json({ message: `Show ${data.id} was deleted` });
         }
       } catch (error) {
-        throw new Error(err);
+        next(err);
       }
     }
   });

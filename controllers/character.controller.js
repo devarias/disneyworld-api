@@ -47,7 +47,7 @@ async function charList(req, res) {
     }
   });
 }
-async function getOneChar(req, res) {
+async function getOneChar(req, res, next) {
   jwt.verify(req.token, TOKEN, async (err) => {
     if (err) {
       res.sendStatus(403);
@@ -60,7 +60,7 @@ async function getOneChar(req, res) {
           res.status(200).json(char);
         }
       } catch (error) {
-        throw new Error(err);
+        next(err);
       }
     }
   });
@@ -152,7 +152,7 @@ async function editChar(req, res) {
     }
   });
 }
-async function deleteChar(req, res) {
+async function deleteChar(req, res, next) {
   jwt.verify(req.token, TOKEN, async (err) => {
     if (err) {
       res.sendStatus(403);
@@ -175,7 +175,7 @@ async function deleteChar(req, res) {
             .json({ message: `Character ${data.name} was deleted` });
         }
       } catch (error) {
-        throw new Error(err);
+        next(err);
       }
     }
   });

@@ -57,11 +57,19 @@ const router = Router();
  * @swagger
  * /login:
  *  post:
- *    summary: Login an User to get token
+ *    summary: Login an User an get the token
+ *    consumes:
+ *      - application/json
+ *    parameters:
+ *      - in: body
+ *        name: user
+ *        description: The user to login
+ *        schema:
+ *          $ref: '#/components/schemas/User'
  *    tags: [1. Login and Register]
  *    responses:
  *      "200":
- *        description: You receive a token
+ *        description: token
  *      "400":
  *        description: Invalid email or password
  *      "409":

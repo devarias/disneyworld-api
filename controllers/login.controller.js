@@ -34,7 +34,7 @@ function validate(email, password) {
   }
   return { bad: false };
 }
-async function register(req, res) {
+async function register(req, res, next) {
   try {
     const data = await req.body;
     const check = await users.findOne({
@@ -57,7 +57,7 @@ async function register(req, res) {
       res.status(409).json({ message: 'Email already registered' });
     }
   } catch (err) {
-    throw new Error(err);
+    next(err);
   }
 }
 
